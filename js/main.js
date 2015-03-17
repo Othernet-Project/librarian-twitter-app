@@ -16,9 +16,7 @@
 
   var emptyTwt = '<li class="tweet">No messages</li>';
 
-  var display = $('#tweets');
   var async = [];
-
 
   $.librarian.files.list('tweets', process);
 
@@ -38,9 +36,9 @@
         results.push(renderTweet(resp))
         };
       results.reverse();
-      console.log(results);
-      document.getElementById('tweets').innerHTML = results; } )
-  }
+      $('#tweets').html(results)
+      } )
+    }
 
   /**
    * Parse the provided message data, and render the HTML.
