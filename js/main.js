@@ -40,12 +40,6 @@
       } )
     }
 
-  function parse(data) {
-    var html = [];
-    html += renderTweet(data);
-    return html
-  }
-
   function fail() {
     console.log('Failed to load');
   }
