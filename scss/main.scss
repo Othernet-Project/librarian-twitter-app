@@ -40,7 +40,28 @@ h1 {
     font-size: 80%;
   }
 
-  &.new {
-    background: #eaffd5;
+.header {
+  margin-bottom: 0.1em;
+  position: relative;
+  left: -12px;
+  }
+
+.title {
+  font-size: 14px;
+  font-weight: bolder;
+  }
+.timestamp {
+  font-size: 12px;
+  }
+
+.text {
+  position: relative;
+  left: 12px;
+  }
+
+.twitter-icon {
+  width: 16px;
+  position: relative;
+  top: 4px;
   }
 }
