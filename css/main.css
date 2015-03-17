@@ -111,6 +111,28 @@ h1 {
   font-size: 80%;
 }
 /* line 43, ../scss/main.scss */
-.tweet.new {
-  background: #eaffd5;
+.tweet .header {
+  margin-bottom: 0.1em;
+  position: relative;
+  left: -12px;
+}
+/* line 49, ../scss/main.scss */
+.tweet .title {
+  font-size: 14px;
+  font-weight: bolder;
+}
+/* line 53, ../scss/main.scss */
+.tweet .timestamp {
+  font-size: 12px;
+}
+/* line 57, ../scss/main.scss */
+.tweet .text {
+  position: relative;
+  left: 12px;
+}
+/* line 62, ../scss/main.scss */
+.tweet .twitter-icon {
+  width: 16px;
+  position: relative;
+  top: 4px;
 }
