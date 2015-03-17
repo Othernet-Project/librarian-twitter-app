@@ -114,7 +114,7 @@ h1 {
 .tweet .header {
   margin-bottom: 0.1em;
   position: relative;
-  left: -12px;
+  left: -10px;
 }
 /* line 49, ../scss/main.scss */
 .tweet .title {
@@ -128,7 +128,7 @@ h1 {
 /* line 57, ../scss/main.scss */
 .tweet .text {
   position: relative;
-  left: 12px;
+  left: 10px;
 }
 /* line 62, ../scss/main.scss */
 .tweet .twitter-icon {
