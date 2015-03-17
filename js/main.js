@@ -4,13 +4,12 @@
 
   var twtTemplate = [
     '<li class="tweet" id="ID">',
-    '<p class="title">TITLE - DATE TIME</p>',
+    '<p class="title">HANDLE - DATE TIME</p>',
     '<p class="text">TEXT</p>',
     '</li>'
   ].join('');
 
   var emptyTwt = '<li class="tweet">No messages</li>';
-  var USER = '@BreakingNews'
 
   var display = $('#tweets');
   var async = [];
@@ -60,7 +59,7 @@
   function renderTweet(message) {
     return twtTemplate
       .replace('ID', message['id'])
-      .replace('TITLE', USER)
+      .replace('HANDLE', message['handle'])
       .replace('DATE', message['date'])
       .replace('TIME', message['time'])
       .replace('TEXT', escape(message['text']));
