@@ -2,6 +2,11 @@
   // List of locales that use right-to-left text direction
   var rtlLocales = ['ar'];
 
+  // We need the current locale (language). We can either parse the URL (the
+  // locale is always the first segment of the path) or we can use Librarian's
+  // lang API.
+  var locale = $.librarian.lang.getLocale();
+
   var twtTemplate = [
     '<li class="tweet" id="ID">',
     '<p class="title">@HANDLE - DATE TIME</p>',
@@ -14,10 +19,6 @@
   var display = $('#tweets');
   var async = [];
 
-  // We need the current locale (language). We can either parse the URL (the
-  // locale is always the first segment of the path) or we can use Librarian's
-  // lang API.
-  var locale = $.librarian.lang.getLocale();
 
   $.librarian.files.list('tweets', process);
 
