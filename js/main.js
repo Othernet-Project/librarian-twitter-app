@@ -33,7 +33,6 @@
       var results = [];
       for (json in async) {
         var resp = async[json]['responseJSON']
-        console.log(resp)
         results.push(renderTweet(resp))
         };
       results.reverse();
