@@ -6,7 +6,7 @@ import zipfile
 SCRIPTDIR = os.path.abspath(os.path.dirname(__file__))
 PROJECTDIR = os.path.dirname(SCRIPTDIR)
 
-PACKAGE_NAME = 'breakingnews-twitter'
+PACKAGE_NAME = 'twitter'
 IGNORE_DIRS = [
     '.git',
     '.sass-cache',
@@ -15,6 +15,7 @@ IGNORE_DIRS = [
     'scripts',
     'svg',
     'example',
+    'out',
 ]
 IGNORE_FILES = [
     'README.rst',
