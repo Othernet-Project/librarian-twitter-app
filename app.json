@@ -1,0 +1,10 @@
+{
+  "id": "breakingnews-twitter",
+  "title": "@BreakingNews Offline Twitter Feed",
+  "version": "0.1",
+  "author": "Outernet Inc",
+  "description": {
+    "en": "See tweets from @BreakingNews"
+  },
+  "icon_behavior": true
+}
