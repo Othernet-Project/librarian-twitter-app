@@ -41,9 +41,6 @@
       } )
     }
 
-  /**
-   * Parse the provided message data, and render the HTML.
-   */
   function parse(data) {
     var html = [];
     html += renderTweet(data);
@@ -54,9 +51,6 @@
     console.log('Failed to load');
   }
 
-  /**
-   * Convert the given message object to HTML.
-   */
   function renderTweet(message) {
     return twtTemplate
       .replace('ID', message['id'])
