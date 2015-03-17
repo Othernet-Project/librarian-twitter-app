@@ -6,11 +6,8 @@ from twitter import Twitter, OAuth
 
 
 TOKEN = '2316526382-tP9Bbs1rMw1ReyqkgAiJdRAwNj58cAMXGT0VtrO'
-TOKEN_SEC = 'XLaAx7XwBSlvOQPmFhAJnMP67r4XcQIGmgHQPU84b6n3c'
-CON_KEY = 'SwFXhcGg6ElNvMJsGKl7h3QCy'
-CON_KEY_SEC = 'Cwtyb0ftzoxLrMGCKPdFD5gIAtgpMwUFCN5LAiaNkQzCbOKhRY'
+CON_KEY = 'XlQa2HVvxN4wU2KufRTvBlEy4'
 
-t = Twitter(auth=OAuth(TOKEN, TOKEN_SEC, CON_KEY, CON_KEY_SEC))
 
 
 if __name__ == "__main__":
@@ -18,9 +15,18 @@ if __name__ == "__main__":
                                      'specified post from specified feed')
     parser.add_argument('feed', metavar='USER', help='User name to get feed'
                         'for.')
+    parser.add_argument('con_secret', metavar='KEY', help='Secret connection'
+                        'key, looks something like this: Cwtyb0ftzoxLrMGCKPdFD'
+                        '5gIAtgpMwUFCN5LAiaNkQzCbOKhRY')
+    parser.add_argument('token_secret', metavar='KEY', help='Secret token, '
+                        'looks something like this: XLaAx7XwBSlvOQPmFhAJnMP67r'
+                        '4XcQIGmgHQPU84b6n3c')
     parser.add_argument('--since', metavar='POSTID', help='Post ID to retrieve'
                         'posts since, not including this ID.')
     args = parser.parse_args()
+
+
+    t = Twitter(auth=OAuth(TOKEN, args.token_secret, CON_KEY, args.con_secret))
 
     statuses = t.statuses.user_timeline(screen_name=args.feed, since=args.since)
     for s in statuses:
