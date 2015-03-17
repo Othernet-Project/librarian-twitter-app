@@ -9,7 +9,10 @@
 
   var twtTemplate = [
     '<li class="tweet" id="ID">',
-    '<p class="title">@HANDLE - DATE TIME</p>',
+    '<p class="header">',
+    '<img class="twitter-icon" src="icon.png"> ',
+    '<span class="title">@HANDLE</span> - ',
+    '<span class="timestamp">DATE at TIME UTC</span></p>',
     '<p class="text">TEXT</p>',
     '</li>'
   ].join('');
