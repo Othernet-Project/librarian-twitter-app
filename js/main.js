@@ -4,7 +4,7 @@
 
   var twtTemplate = [
     '<li class="tweet" id="ID">',
-    '<p class="title">HANDLE - DATE TIME</p>',
+    '<p class="title">@HANDLE - DATE TIME</p>',
     '<p class="text">TEXT</p>',
     '</li>'
   ].join('');
