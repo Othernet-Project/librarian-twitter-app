@@ -57,18 +57,6 @@
       .replace('HANDLE', message['handle'])
       .replace('DATE', message['date'])
       .replace('TIME', message['time'])
-      .replace('TEXT', escape(message['text']));
-  }
-
-  /**
-   * Escape HTML characters
-   */
-  function escape(s) {
-    return s
-      .replace(/>/g, '&gt;')
-      .replace(/</g, '&lt;')
-      .replace(/'/g, '&#39;')
-      .replace(/"/g, '&quot;')
-      .replace(/&/g, '&amp;');
+      .replace('TEXT', message['text']);
   }
 }(this, jQuery));
