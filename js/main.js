@@ -36,6 +36,7 @@
         var resp = async[json]['responseJSON']
         results.push(renderTweet(resp))
         };
+      results.reverse();
       console.log(results);
       document.getElementById('tweets').innerHTML = results; } )
   }
@@ -72,7 +73,7 @@
     return s
       .replace(/>/g, '&gt;')
       .replace(/</g, '&lt;')
-      .replace(/'/g, '&apos;')
+      .replace(/'/g, '&#39;')
       .replace(/"/g, '&quot;')
       .replace(/&/g, '&amp;');
   }
