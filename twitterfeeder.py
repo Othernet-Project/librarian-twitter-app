@@ -29,6 +29,7 @@ if __name__ == "__main__":
     t = Twitter(auth=OAuth(TOKEN, args.token_secret, CON_KEY, args.con_secret))
 
     handle = args.handle[1:]
+    json_output = []
 
     statuses = t.statuses.user_timeline(screen_name=handle, since=args.since)
     for s in statuses:
@@ -38,7 +39,9 @@ if __name__ == "__main__":
         id = str(s['id'])
         dump = json.dumps({'id': id, 'text': s['text'], 'date': date, 'time':
                            time, 'handle': handle},
-                          sort_keys=True, separators=(',', ': '), indent=4)
-        out = 'out'
-        with open(os.path.join(out, id + '.json'), 'w') as f:
-            f.write(dump)
+                          sort_keys=True, separators=(',', ': '))
+        json_output.append(dump)
+    out = 'out'
+    with open(os.path.join(out, handle + '.json'), 'w') as f:
+        output = '[{}]'.format(', '.join(json_output))
+        f.write(output)

@@ -35,8 +35,10 @@
     $.when.apply($, async).done(function () { 
       var results = [];
       for (json in async) {
-        var resp = async[json]['responseJSON']
-        results.push(renderTweet(resp))
+        var tweet_json = async[json]['responseJSON'];
+        for (tweet in tweet_json) {
+          results.push(renderTweet(tweet_json[tweet]))
+          }
         };
       results.reverse();
       $('#tweets').html(results)
