@@ -17,7 +17,7 @@
     '</li>'
   ].join('');
 
-  var emptyTwt = '<li class="tweet">No messages</li>';
+  var emptyTwt = '<li class="tweet">No tweets</li>';
 
   var async = [];
 
