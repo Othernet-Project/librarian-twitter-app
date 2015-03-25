@@ -18,14 +18,25 @@
   ].join('');
 
   var emptyTwt = '<li class="tweet">No tweets</li>';
-
   var async = [];
+  var missingFolder = 'This folder does not exist';
 
   $.librarian.files.list('tweets', process);
 
   function process(dir_json) {
-    for (t in dir_json['files']) {
-      tweet = $.librarian.files.url(dir_json['files'][t]['path'])
+    if (!dir_json.files.length && dir_json.readme === missingFolder) {
+      var output = '<li class="tweet"><p class="text">Tweets directory does not yet exist. It will be created automatically when you get a new data file. Please wait until a data file has been downloaded to use this app.</p></li>';
+      $('#tweets').html(output);
+      return;
+    }
+    if (!dir_json.files.length) {
+      var output = '<li class="tweet"><p class="text">No tweets in directory. Please wait until a data file has been downloaded to use this app.</p></li>';
+      $('#tweets').html(output);
+      return;
+    }
+    var t;
+    for (t in dir_json.files) {
+      tweet = $.librarian.files.url(dir_json['files'][t]['path']);
       // Execute the AJAX request to fetch the messages and perform appropriate
       // operation depending on the response.
       var xhr = $.getJSON(tweet);
@@ -34,15 +45,17 @@
     }
     $.when.apply($, async).done(function () { 
       var results = [];
+      var json;
       for (json in async) {
         var tweet_json = async[json]['responseJSON'];
+        var tweet;
         for (tweet in tweet_json) {
-          results.push(renderTweet(tweet_json[tweet]))
+          results.push(renderTweet(tweet_json[tweet]));
           }
-        };
+        }
       results.reverse();
-      $('#tweets').html(results)
-      } )
+      $('#tweets').html(results);
+      } );
     }
 
   function fail() {
