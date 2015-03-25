@@ -21,8 +21,8 @@ if __name__ == "__main__":
     parser.add_argument('token_secret', metavar='KEY', help='Secret token, '
                         'looks something like this: XLaAx7XwBSlvOQPmFhAJnMP67r'
                         '4XcQIGmgHQPU84b6n3c')
-    parser.add_argument('--since', metavar='POSTID', help='Post ID to retrieve'
-                        'posts since, not including this ID.')
+    parser.add_argument('--out', metavar='DIR', help='Directory to output the '
+                        'tweet file to.', default='out')
     args = parser.parse_args()
 
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     handle = args.handle[1:]
     json_output = []
 
-    statuses = t.statuses.user_timeline(screen_name=handle, since=args.since)
+    statuses = t.statuses.user_timeline(screen_name=handle)
     for s in statuses:
         time_obj = datetime.strptime(s['created_at'],
                                       '%a %b %d %H:%M:%S +0000 %Y')
