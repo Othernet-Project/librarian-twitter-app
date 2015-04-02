@@ -41,7 +41,6 @@ if __name__ == "__main__":
                            time, 'handle': handle},
                           sort_keys=True, separators=(',', ': '))
         json_output.append(dump)
-    out = 'out'
-    with open(os.path.join(out, handle + '.json'), 'w') as f:
+    with open(os.path.join(args.out, handle + '.json'), 'w') as f:
         output = '[{}]'.format(', '.join(json_output))
         f.write(output)
