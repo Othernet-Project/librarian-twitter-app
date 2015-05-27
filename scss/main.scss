@@ -18,12 +18,12 @@ h1 {
   right: 0;
   color: white;
   text-align: center;
+  z-index: 999;
 }
 
 #tweets {
   max-width: 600px;
   margin: 0 auto;
-  padding-top: 100px;
 }
 
 .tweet {
@@ -50,6 +50,7 @@ h1 {
   font-size: 14px;
   font-weight: bolder;
   }
+
 .timestamp {
   font-size: 12px;
   }
@@ -64,4 +65,33 @@ h1 {
   position: relative;
   top: 4px;
   }
+}
+
+img {
+  max-width: 560px;
+}
+
+#feeds {
+  max-width: 600px;
+  margin: 100px auto 1em auto;
+  
+}
+
+.feed {
+  color: white;
+  background: #298BEC;
+  padding: 0.3em 1em;
+  margin-right: 1em;
+  text-decoration: white;
+  @include border-radius(2px);
+}
+
+#error {
+  background: white;
+  color: #212121;
+  padding: 0.3em 1em;
+  margin-bottom: 1em;
+  @include box-shadow(0 0 5px transparentize(red, 0.4));
+  @include border-radius(2px);
+  border: 2px solid red;
 }

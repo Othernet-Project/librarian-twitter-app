@@ -1,4 +1,4 @@
-/* line 5, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -20,45 +20,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, C:/Ruby21-x64/lib/ruby/gems/2.1.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../.gem/ruby/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
@@ -82,13 +82,13 @@ h1 {
   right: 0;
   color: white;
   text-align: center;
+  z-index: 999;
 }
 
-/* line 23, ../scss/main.scss */
+/* line 24, ../scss/main.scss */
 #tweets {
   max-width: 600px;
   margin: 0 auto;
-  padding-top: 100px;
 }
 
 /* line 29, ../scss/main.scss */
@@ -121,18 +121,56 @@ h1 {
   font-size: 14px;
   font-weight: bolder;
 }
-/* line 53, ../scss/main.scss */
+/* line 54, ../scss/main.scss */
 .tweet .timestamp {
   font-size: 12px;
 }
-/* line 57, ../scss/main.scss */
+/* line 58, ../scss/main.scss */
 .tweet .text {
   position: relative;
   left: 10px;
 }
-/* line 62, ../scss/main.scss */
+/* line 63, ../scss/main.scss */
 .tweet .twitter-icon {
   width: 16px;
   position: relative;
   top: 4px;
+}
+
+/* line 70, ../scss/main.scss */
+img {
+  max-width: 560px;
+}
+
+/* line 74, ../scss/main.scss */
+#feeds {
+  max-width: 600px;
+  margin: 100px auto 1em auto;
+}
+
+/* line 80, ../scss/main.scss */
+.feed {
+  color: white;
+  background: #298BEC;
+  padding: 0.3em 1em;
+  margin-right: 1em;
+  text-decoration: white;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+
+/* line 89, ../scss/main.scss */
+#error {
+  background: white;
+  color: #212121;
+  padding: 0.3em 1em;
+  margin-bottom: 1em;
+  -moz-box-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+  -webkit-box-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  border: 2px solid red;
 }

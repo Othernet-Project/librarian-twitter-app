@@ -1,10 +1,10 @@
 {
   "id": "twitter",
-  "title": "Offline Twitter Feed",
-  "version": "0.1",
+  "title": "Twitter",
+  "version": "0.3",
   "author": "Outernet Inc",
   "description": {
-    "en": "See selected tweets from Twitter"
+    "en": "Outernet's Rebroadcast Twitter feed"
   },
   "icon_behavior": false
 }
