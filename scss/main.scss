@@ -72,15 +72,18 @@ img {
 }
 
 #feeds {
+  text-align: center;
   max-width: 600px;
   margin: 100px auto 1em auto;
   
 }
 
 .feed {
+  display: inline-block;
   color: white;
   background: #298BEC;
   padding: 0.3em 1em;
+  margin-bottom: 1em;
   margin-right: 1em;
   text-decoration: white;
   @include border-radius(2px);

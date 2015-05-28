@@ -79,11 +79,10 @@ def parse_tweet(tweet):
                                  '%a %b %d %H:%M:%S +0000 %Y')
     date, time = time_obj.isoformat().split('T')
     id = str(tweet['id'])
-    parsed = {'id': id, 'text': tweet['text'], 'date': date, 'time': time,
+    print(type(tweet['text']))
+    parsed = {'id': id, 'text': tweet['text'].encode('utf8'), 'date': date, 'time': time,
             'handle': tweet['user']['screen_name']}
     return parsed
-
-
 
 
 def write_tweet(out, tweet, ip_list):
@@ -101,11 +100,9 @@ def write_tweet(out, tweet, ip_list):
         tweet['img'] = ext
         image_name = tweet['id'] + ext
         image_out = os.path.join(dir, 'img', image_name)
-        try:
-            urllib.urlretrieve(image, image_out)
-        except IOError:
-            os.mkdir(os.path.join(dir, 'img'))
-            urllib.urlretrieve(image, image_out)
+        if not os.path.exists(os.path.join(dir, 'img')):
+            os.makedirs(os.path.join(dir, 'img'))
+        urllib.urlretrieve(image, image_out)
     try:
         with open(json_file, 'w') as f:
             f.write(json.dumps(tweet, ensure_ascii=True, sort_keys=False, indent=4, separators=(',', ': ')))
@@ -117,8 +114,7 @@ def write_tweet(out, tweet, ip_list):
             os.mkdir(dir)
         with open(json_file, 'w') as f:
             f.write(json.dumps(tweet, sort_keys=False, indent=4, separators=(',', ': ')))
-    push_to_ftp(json_file, name, ip_list)
-
+    #push_to_ftp(json_file, name, ip_list)
 
 
 def write_last(id, out, handle):
@@ -163,9 +159,6 @@ def main():
         if raw_tweet == raw_tweets[0]:
             write_last(str(raw_tweet['id']), out, handle)
         write_tweet(out, raw_tweet, ip_list)
-
-    # Depricated
-    #push_to_ftp(json_file, name)
 
 
 if __name__ == "__main__":
