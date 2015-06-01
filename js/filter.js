@@ -5,9 +5,7 @@
 
   //Builds html for the filter
   function build_filter(feeds) {
-    var filter_list = [
-      '<a class="feed" id="all" href="#">All Feeds</a>'
-    ];
+    var filter_list = [];
     var i = 0;
     var l = feeds.length;
     for (; i < l; i++) {
