@@ -1,10 +1,10 @@
 {
-  "id": "twitter",
-  "title": "Twitter Feeds",
+  "id": "dw-twitter",
+  "title": "Deutche Welle Twitter Feeds",
   "version": "0.4",
   "author": "Outernet Inc",
   "description": {
-    "en": "A collection of Twitter feeds"
+    "en": "A collection of Deutche Welle Twitter feeds"
   },
   "icon_behavior": false
 }

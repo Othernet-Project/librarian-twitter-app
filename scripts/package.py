@@ -6,7 +6,7 @@ import zipfile
 SCRIPTDIR = os.path.abspath(os.path.dirname(__file__))
 PROJECTDIR = os.path.dirname(SCRIPTDIR)
 
-PACKAGE_NAME = 'twitter'
+PACKAGE_NAME = 'dw-twitter'
 IGNORE_DIRS = [
     '.git',
     '.sass-cache',

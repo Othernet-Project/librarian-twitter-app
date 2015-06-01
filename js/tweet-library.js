@@ -3,8 +3,8 @@ this.twitter = (function(window) {
   var library = {};
 
   library.async = []; 
-  library.BASE_DIR = "unicef-tweets"; 
-  library.DEFAULT_FEED = "unicef-tweets/unicef";
+  library.BASE_DIR = "dw-tweets"; 
+  library.DEFAULT_FEED = "dw-tweets/dw_english";
 
   //Retrieves handle directories from base_dir and passes them to
   //get_tweet_paths

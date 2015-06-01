@@ -28,7 +28,11 @@ def ftp_login(line):
 
 def ftp_chdir(base_dir, ftp, dir):
     ftp.cwd('/')
-    ftp.cwd(base_dir)
+    try:
+        ftp.cwd(base_dir)
+    except ftplib.error_temp:
+        ftp.mkd(base_dir)
+        ftp.cwd(base_dir)
     try:
         ftp.cwd(dir)
     except ftplib.error_temp:
