@@ -1,7 +1,7 @@
 {
   "id": "twitter",
   "title": "Twitter Feeds",
-  "version": "0.3",
+  "version": "0.4",
   "author": "Outernet Inc",
   "description": {
     "en": "A collection of Twitter feeds"
