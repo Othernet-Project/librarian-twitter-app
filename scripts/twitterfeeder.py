@@ -9,34 +9,68 @@ from twitter import Twitter, OAuth
 
 TOKEN = '2316526382-tP9Bbs1rMw1ReyqkgAiJdRAwNj58cAMXGT0VtrO'
 CON_KEY = 'XlQa2HVvxN4wU2KufRTvBlEy4'
+NOW = datetime.now()
+TODAY = NOW.strftime('%m%d')
 
 
-def push_to_ftp(json, name, ip_list):
-    now = datetime.now()
+def ftp_login(line):
     ftp = ftplib.FTP()
-    with open(ip_list) as f:
-        for line in f:
-            u, p, i = line.split(':')
-            user = u.strip()
-            pass_key = p.strip()
-            ip = i.strip()
-            ftp.connect(ip)
-            print('%s | Connected | %s' % (now, ip))
-            ftp.login(user, pass_key)
-            print('%s | Logged in | %s' % (now, user))
-            try:
-                ftp.cwd('/files/tweets')
-            except ftplib.error_perm:
-                ftp.cwd('/files/')
-                ftp.mkd('tweets')
-                ftp.cwd('/files/tweets')
-            print('%s | Navigated | tweets' % now)
-            with open(json, 'rb') as file:
-                ftp.storbinary('STOR ' + name, file)
-            print('%s | Wrote | %s' % (now, name))
+    u, p, i = line.split(':')
+    user = u.strip()
+    pass_key = p.strip()
+    ip = i.strip()
+    ftp.connect(ip)
+    print('%s | Connected | %s' % (NOW, ip))
+    ftp.login(user, pass_key)
+    print('%s | Logged in | %s' % (NOW, user))
+    return ftp
 
 
-def get_image(tweet):
+def ftp_chdir(base_dir, ftp, dir):
+    ftp.cwd('/')
+    ftp.cwd(base_dir)
+    try:
+        ftp.cwd(dir)
+    except ftplib.error_temp:
+        ftp.mkd(dir)
+        ftp.cwd(dir)
+    print('%s | Navigated | %s/%s' % (NOW, base_dir, dir))
+
+
+def ftp_rem_old(ftp):
+    """ Removes files older than 3 days in the current directory """
+    for f in ftp.nlst():
+        #try:
+            modifiedTime = ftp.sendcmd('MDTM ' + f)
+            time = datetime.strptime(modifiedTime[4:], "%Y%m%d%H%M%S")
+            delta = NOW - time
+            if delta.days > 3:
+                ftp.delete(f)
+                print('%s | Removed Old | %s' % (NOW, ftp.pwd() + '/' + f))
+            else:
+                print('%s | Confirmed New | %s' % (NOW, ftp.pwd() + '/' + f))
+        #except ftplib.error_perm:
+            #print('%s | Found a Directory | %s' % (NOW, ftp.pwd() + '/' + f))
+            #pass
+
+
+def push_to_ftp(ftp, in_file, out_file):
+    """
+    Puts a local file (with path) to specified remote path.
+    Takes the following arguments:
+        ftp = ftp object on which to transfer
+        in_file = local file to upload, format: /path/to/file.ext
+        out_file = path to upload to, format: /path/to/file.ext
+    """
+    with open(in_file, 'rb') as file:
+        try:
+            ftp.storbinary('STOR ' + out_file, file)
+            print('%s | Wrote | %s' % (NOW, ftp.pwd() + out_file))
+        except ftplib.error_perm:
+            print('%s | Already exists! | %s' % (NOW, ftp.pwd() + '/' + out_file))
+
+
+def get_image_url(tweet):
     """ Checks if an image is linked in the tweet data and returns url """
     try:
         media = tweet['entities']['media']
@@ -48,26 +82,36 @@ def get_image(tweet):
         return False
 
 
-def get_tweets(out, handle, stoken, scon_key):
+def get_image(tweet, dir):
+    url = get_image_url(tweet)
+    if url:
+        ext = url[-4:]
+        tweet['img'] = ext
+        image_name = str(tweet['id']) + ext
+        image_out = os.path.join(dir, image_name)
+        urllib.urlretrieve(url, image_out)
+        return [ext, image_out, image_name]
+
+
+def get_last_id(out):
+    try:
+        with open(os.path.join(out, 'last.txt'), 'r') as last_file:
+            last = last_file.readline()
+            return last
+    except IOError:
+        return False
+
+
+def get_tweets(dir, handle, stoken, scon_key):
     """ Retrieves tweets from Twitter API """
     t = Twitter(auth=OAuth(TOKEN, stoken, CON_KEY, scon_key))
 
-    last_id = get_last_id(out, handle)
+    last_id = get_last_id(dir)
     if last_id:
         tweets = t.statuses.user_timeline(screen_name=handle, since_id=last_id)
     else:
         tweets = t.statuses.user_timeline(screen_name=handle)
     return tweets
-
-
-def get_last_id(out, handle):
-    try:
-        with open(os.path.join(out, handle, 'last.txt'), 'r') as last_file:
-            last = last_file.readline()
-            print(last)
-            return last
-    except IOError:
-        return False
 
 
 def parse_tweet(tweet):
@@ -79,50 +123,14 @@ def parse_tweet(tweet):
                                  '%a %b %d %H:%M:%S +0000 %Y')
     date, time = time_obj.isoformat().split('T')
     id = str(tweet['id'])
-    print(type(tweet['text']))
     parsed = {'id': id, 'text': tweet['text'].encode('utf8'), 'date': date, 'time': time,
             'handle': tweet['user']['screen_name']}
     return parsed
 
 
-def write_tweet(out, tweet, ip_list):
-    """ Writes each tweet to a file named ID.json, with relevant image """
-    image = get_image(tweet)
-
-    # No longer a full tweet after next line
-    tweet = parse_tweet(tweet)
-    handle = tweet['handle']
-    dir = os.path.join(out, handle)
-    name = tweet['id'] + '.json'
-    json_file = os.path.join(dir, name)
-    if image:
-        ext = image[-4:]
-        tweet['img'] = ext
-        image_name = tweet['id'] + ext
-        image_out = os.path.join(dir, 'img', image_name)
-        if not os.path.exists(os.path.join(dir, 'img')):
-            os.makedirs(os.path.join(dir, 'img'))
-        urllib.urlretrieve(image, image_out)
-    try:
-        with open(json_file, 'w') as f:
-            f.write(json.dumps(tweet, ensure_ascii=True, sort_keys=False, indent=4, separators=(',', ': ')))
-    except IOError:
-        try:
-            os.mkdir(dir)
-        except OSError:
-            os.mkdir(out)
-            os.mkdir(dir)
-        with open(json_file, 'w') as f:
-            f.write(json.dumps(tweet, sort_keys=False, indent=4, separators=(',', ': ')))
-    #push_to_ftp(json_file, name, ip_list)
-
-
-def write_last(id, out, handle):
-    try:
-        with open(os.path.join(out, handle, 'last.txt'), 'w') as last_file:
-            last_file.write(id)
-    except IOError:
-        pass
+def write_last(id, out):
+    with open(os.path.join(out, 'last.txt'), 'w') as last_file:
+        last_file.write(id)
 
 
 def main():
@@ -144,21 +152,56 @@ def main():
                         'tweet files to.', default='out')
     parser.add_argument('--last-tweet', metavar='LAST-TWEET', help='Last tweet'
                         'downloaded, for retrieving only new tweets')
+    parser.add_argument('--updir', metavar='REMDIR', help='Directory to upload'
+                        ' tweets to.', default='/files/unicef/')
     args = parser.parse_args()
 
-    out = args.out
     handle = args.handle[1:]
     stoken = args.token_secret
     scon_key = args.con_secret
-    ip_list = args.ip_list
+    ip_list = open(args.ip_list, 'r')
 
-    raw_tweets = get_tweets(out, handle, stoken, scon_key)
+    dir = os.path.join(args.out, handle)
+    image_dir = os.path.join(dir, 'img')
+    if not os.path.exists(image_dir):
+        os.makedirs(image_dir)
 
+    raw_tweets = get_tweets(dir, handle, stoken, scon_key)
+
+    tweet_group = []
+    image_list = []
     for raw_tweet in raw_tweets:
-        # Writes the first (most recent) id to last.txt in a given directory.
+        tweet = parse_tweet(raw_tweet)
+        img = get_image(raw_tweet, image_dir)
+        if img:
+            tweet['img'] = img[0]
+            print("%s | Retrieved image | %s" % (NOW, img[1]))
+            image_list.append([img[1], img[2]])
+        tweet_group.append(json.dumps(tweet, sort_keys=False, indent=4,
+                                      separators=(',', ': ')))
         if raw_tweet == raw_tweets[0]:
-            write_last(str(raw_tweet['id']), out, handle)
-        write_tweet(out, raw_tweet, ip_list)
+            last = str(tweet['id'])
+            write_last(last, dir)
+
+    for line in ip_list.readlines():
+        ftp = ftp_login(line)
+        ftp_chdir(args.updir, ftp, handle)
+
+        name = '%s-%s.json' % (handle, TODAY)
+        json_file = os.path.join(dir, name)
+        content = '[\n' + ',\n'.join(tweet_group) + '\n]'
+        with open(json_file, 'wb') as f:
+            f.write(content.encode('utf8'))
+        push_to_ftp(ftp, json_file, name)
+
+        ftp_rem_old(ftp)
+
+        ftp_chdir(args.updir, ftp, '%s/img' % handle)
+
+        for img in image_list:
+            push_to_ftp(ftp, img[0], img[1])
+
+        ftp_rem_old(ftp)
 
 
 if __name__ == "__main__":

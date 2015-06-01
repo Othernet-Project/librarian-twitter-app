@@ -3,8 +3,8 @@ this.twitter = (function(window) {
   var library = {};
 
   library.async = []; 
-  library.BASE_DIR = "dw-tweets"; 
-  library.DEFAULT_FEED = "dw-tweets/dw_global";
+  library.BASE_DIR = "unicef-tweets"; 
+  library.DEFAULT_FEED = "unicef-tweets/unicef";
 
   //Retrieves handle directories from base_dir and passes them to
   //get_tweet_paths
@@ -16,7 +16,8 @@ this.twitter = (function(window) {
       no_tweets();
     } else {
       for (; i < l; i++) {
-        $.librarian.files.list(base_dir.dirs[i][0], get_tweet_paths);
+        $.librarian.files.list(base_dir.dirs[i][0], bugger);
+        //$.librarian.files.list(base_dir.dirs[i][0], get_tweet_paths);
       }
     }
   };
@@ -33,6 +34,10 @@ this.twitter = (function(window) {
     }
     retrieve_tweets();
   };
+
+  function bugger(data) {
+    console.log(data);
+  }
 
   emptyTwt = '<li class="tweet">No tweets</li>';
   missingFolder = 'This folder does not exist';
@@ -63,6 +68,31 @@ this.twitter = (function(window) {
     xhr.fail(fail);
   }
 
+  //Ajax handler 
+  function retrieve_tweets() {
+    $.when.apply($, library.async).done(function () { 
+      var args = [].slice.call(arguments); 
+      build_feed(args[0]);
+    } );
+  }
+
+  function build_feed(chunk) {
+    var results = [];
+    var i = 0;
+    var l = chunk.length;
+    for (; i < l; i++) {
+      if (chunk[i].id) {
+        results.push(renderTweet(chunk[i]));
+      }
+    }
+    if (results.length > 0) {
+      results.reverse();
+      $('#tweets').html(results);
+    } else {
+      no_tweets();
+    }
+  }
+
   function renderTweet(message) {
     var imgTag;
     var imgFile;
@@ -70,7 +100,7 @@ this.twitter = (function(window) {
       imgFile = message.id + message.img;
       imgTag = '<img src="/files/BASEDIR/HANDLE/img/IMG">'
         .replace('BASEDIR', library.BASE_DIR)
-        .replace('HANDLE', message.handle)
+        .replace('HANDLE', message.handle.toLowerCase())
         .replace('IMG', imgFile);
     } else {
       imgTag = "";
@@ -88,27 +118,6 @@ this.twitter = (function(window) {
     console.log(status);
     console.log(err);
     console.log(obj.getAllResponseHeaders());
-  }
-
-  function retrieve_tweets() {
-    $.when.apply($, library.async).done(function () { 
-      var results = [];
-      var json;
-      var args = [].slice.call(arguments); 
-      var i = 0;
-      var l = args.length;
-      for (; i < l; i++) {
-        results.push(renderTweet(args[i][0]));
-      }
-      if (results.length > 0) {
-        results.reverse();
-        $('#tweets').html(results);
-      } else {
-        no_tweets();
-      }
-    } );
-    //console.log('library.async reset');
-    //library.async = [];
   }
 
   return library;
