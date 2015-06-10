@@ -1,6 +1,7 @@
 this.twitter = (function(window) {
   //Variable returned as this.twitter at the end
   var library = {};
+  var results = [];
 
   library.async = []; 
   library.BASE_DIR = "dw-tweets"; 
@@ -13,6 +14,7 @@ this.twitter = (function(window) {
     var i = 0;
     var l = base_dir.dirs.length;
     if (l === 0) {
+      console.log('No folders found');
       no_tweets();
     } else {
       for (; i < l; i++) {
@@ -26,12 +28,14 @@ this.twitter = (function(window) {
   library.get_tweet_paths = function (tweet_dir) {
     var file;
     var tweet_path;
+    var tweet_paths = [];
     var i = 0;
     var l = tweet_dir.files.length;
     for (; i < l; i++) {
       tweet_path = $.librarian.files.url(tweet_dir.files[i].path);
-      get_tweet(tweet_path);
+      tweet_paths.push(tweet_path);
     }
+    get_tweet(tweet_paths);
     retrieve_tweets();
   };
 
@@ -60,36 +64,39 @@ this.twitter = (function(window) {
   }
 
   //Gets tweet from path and passes them to rendering ajax handler
-  function get_tweet(tweet_path) {
+  function get_tweet(tweet_paths) {
     // Execute the AJAX request to fetch the messages and perform appropriate
     // operation depending on the response.
-    var xhr = $.getJSON(tweet_path);
-    library.async.push(xhr);
-    xhr.fail(fail);
+    var path;
+    var i = 0;
+    var l = tweet_paths.length;
+    for (; i <l; i++) {
+      var xhr = $.getJSON(tweet_paths[i]);
+      library.async.push(xhr);
+      xhr.fail(fail);
+    }
   }
 
   //Ajax handler 
   function retrieve_tweets() {
     $.when.apply($, library.async).done(function () { 
       var args = [].slice.call(arguments); 
-      build_feed(args[0]);
+      var i = 0;
+      var l = args.length;
+      for (; i < l; i++) {
+        build_feed(args[i][0]);
+      }
+      printFeed();
     } );
   }
 
   function build_feed(chunk) {
-    var results = [];
     var i = 0;
     var l = chunk.length;
     for (; i < l; i++) {
       if (chunk[i].id) {
         results.push(renderTweet(chunk[i]));
       }
-    }
-    if (results.length > 0) {
-      results.reverse();
-      $('#tweets').html(results);
-    } else {
-      no_tweets();
     }
   }
 
@@ -120,5 +127,16 @@ this.twitter = (function(window) {
     console.log(obj.getAllResponseHeaders());
   }
 
+  function printFeed() {
+    if (results.length > 0) {
+      results.sort();
+      results.reverse();
+      $('#tweets').html(results);
+    } else {
+      no_tweets();
+    }
+  }
+
   return library;
+
 }(this));
