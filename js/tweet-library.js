@@ -81,10 +81,15 @@ this.twitter = (function(window) {
   function retrieve_tweets() {
     $.when.apply($, library.async).done(function () { 
       var args = [].slice.call(arguments); 
-      var i = 0;
-      var l = args.length;
-      for (; i < l; i++) {
-        build_feed(args[i][0]);
+      if (args[1] === "success") {
+        build_feed(args[0]);
+        console.log(args);
+      } else {
+        var i = 0;
+        var l = args.length;
+        for (; i < l; i++) {
+          build_feed(args[i][0]);
+        }
       }
       printFeed();
     } );
@@ -132,6 +137,7 @@ this.twitter = (function(window) {
       results.sort();
       results.reverse();
       $('#tweets').html(results);
+      results = [];
     } else {
       no_tweets();
     }
