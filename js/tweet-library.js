@@ -1,14 +1,12 @@
 this.twitter = (function(window) {
-  //Variable returned as this.twitter at the end
-  var library = {};
-  var results = [];
+  var library = {}; //Variable 'library' returned as this.twitter at the end
+  var results = []; //Variable 'results' used as list of finished tweet divs
 
-  library.async = []; 
-  library.BASE_DIR = "tweets"; 
-  library.DEFAULT_FEED = "tweets/breakingnews";
+  library.async = []; //Variable 'async' exposed so it may be emptied
+  library.BASE_DIR = "tweets"; //Directory used for finding tweets
+  library.DEFAULT_FEED = "tweets/breakingnews"; //Initial twitter feed
 
-  //Retrieves handle directories from base_dir and passes them to
-  //get_tweet_paths
+  //Builds list of handle paths from 'BASE_DIR' and calls get_tweet_paths
   library.gather_folders = function (base_dir) {
     var dir;
     var i = 0;
@@ -24,7 +22,7 @@ this.twitter = (function(window) {
     }
   };
   
-  //Retrieves tweet paths from a given handle directory and passes to get_tweet
+  //Retrieves json paths from a handle path and calls get_tweet on the json path
   library.get_tweet_paths = function (tweet_dir) {
     var file;
     var tweet_path;
@@ -39,14 +37,10 @@ this.twitter = (function(window) {
     retrieve_tweets();
   };
 
-  function bugger(data) {
-    console.log(data);
-  }
-
   emptyTwt = '<li class="tweet">No tweets</li>';
   missingFolder = 'This folder does not exist';
 
-  // Tweet template vars/funcs
+  // Tweet template
   twtTemplate = [
     '<div class="tweet" id="ID">',
     '<p class="header">',
@@ -58,12 +52,12 @@ this.twitter = (function(window) {
     '</div>'
   ].join('');
 
-  //Function to be called in the event of no tweets being present
+  //Populates '#tweets' with no tweet message
   function no_tweets() {
     $('#tweets').html('<li id="error"><p class="text">No tweets found!</p></li>');
   }
 
-  //Gets tweet from path and passes them to rendering ajax handler
+  //Takes a list of paths and loads each item into the ajax handler
   function get_tweet(tweet_paths) {
     // Execute the AJAX request to fetch the messages and perform appropriate
     // operation depending on the response.
@@ -71,18 +65,18 @@ this.twitter = (function(window) {
     var i = 0;
     var l = tweet_paths.length;
     for (; i <l; i++) {
-      var xhr = $.getJSON(tweet_paths[i]);
-      library.async.push(xhr);
-      xhr.fail(fail);
+      var xhr = $.getJSON(tweet_paths[i]); //Create request object
+      library.async.push(xhr); //Put it into async variable for collection
+      xhr.fail(fail); //If it failed, do fail
     }
   }
 
-  //Ajax handler 
+  //Ajax handler: Waits until async is finished then calls build_feed
   function retrieve_tweets() {
     $.when.apply($, library.async).done(function () { 
       var args = [].slice.call(arguments); 
-      if (args[1] === "success") {
-        build_feed(args[0]);
+      if (args[1] === "success") { //This check to see if it's one tweet could
+        build_feed(args[0]);       //really be improved
         console.log(args);
       } else {
         var i = 0;
@@ -95,16 +89,18 @@ this.twitter = (function(window) {
     } );
   }
 
-  function build_feed(chunk) {
+  //
+  function build_feed(json) {
     var i = 0;
-    var l = chunk.length;
+    var l = json.length;
     for (; i < l; i++) {
-      if (chunk[i].id) {
-        results.push(renderTweet(chunk[i]));
+      if (json[i].id) { //This should probably fail noisily
+        results.push(renderTweet(json[i]));
       }
     }
   }
 
+  //Takes a tweet and returns it rendered as html
   function renderTweet(message) {
     var imgTag;
     var imgFile;
@@ -126,12 +122,19 @@ this.twitter = (function(window) {
       .replace('IMG', imgTag);
   }
 
+  //Generic logging function
+  function bugger(data) {
+    console.log(data);
+  }
+
+  //Generic failure logging function
   function fail(obj, status, err) {
     console.log(status);
     console.log(err);
     console.log(obj.getAllResponseHeaders());
   }
 
+  //Sort results then populate '#tweets' with results or call no_tweets
   function printFeed() {
     if (results.length > 0) {
       results.sort();
