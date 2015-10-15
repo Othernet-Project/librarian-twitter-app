@@ -6,6 +6,10 @@ this.twitter = (function(window) {
   library.BASE_DIR = "tweets"; //Directory used for finding tweets
   library.DEFAULT_FEED = "tweets/breakingnews"; //Initial twitter feed
 
+  library.list_tweets(base_dir=library.BASE_DIR, handle='library.DEFAULT_FEED, page='all') {
+    $.librarian.files.list(handle, twitter.get_tweet_paths);
+  }
+
   //Builds list of handle paths from 'BASE_DIR' and calls get_tweet_paths
   library.gather_folders = function (base_dir) {
     var dir;
